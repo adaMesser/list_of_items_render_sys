@@ -1,0 +1,329 @@
+<?php
+/**
+ * 
+ */
+
+/**
+ * Implements hook_help().
+ *
+ * Displays help and module information.
+ *
+ * @param path
+ *   Which path of the site we're using to display help
+ *
+ * @param arg
+ *   Array that holds the current path as returned from arg() function
+ *
+ * @return string
+ *   String
+ */
+function list_of_items_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#list_of_items":
+      return '' . t("This is my list of items.") . '';
+      break;
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ *
+ * @return mixed
+ */
+function list_of_items_block_info() {
+  $blocks['list_of_items'] = [
+    'info' => t('List of items'),
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  ];
+  return $blocks;
+}
+
+
+/**
+ * @return mixed
+ */
+function list_of_items_menu() {
+  $items['ads'] = [
+    'title' => 'Объявления',
+    'description' => 'Страница с объявлениями',
+    'page callback' => 'list_of_items_ads_page',
+    'menu_name' => 'menu-test',
+    'expanded' => TRUE,
+    'access callback' => TRUE,
+  ];
+  $items['ads/buy'] = [
+    'title' => 'Куплю',
+    'description' => 'Страница с объявлениями о покупке',
+    'page callback' => 'list_of_items_buy_ads_page',
+    'access callback' => TRUE,
+    'menu_name' => 'menu-test',
+    'expanded' => TRUE,
+  ];
+  $items['ads/sell'] = [
+    'title' => 'Продам',
+    'description' => 'Страница с объявлениями о продаже',
+    'page callback' => 'list_of_items_sell_ads_page',
+    'access callback' => TRUE,
+    'menu_name' => 'menu-test',
+    'expanded' => TRUE,
+  ];
+  $items['ads/add'] = [
+    'title' => 'Добавить объявление',
+    'description' => 'Добавление объявления',
+    'page callback' => 'list_of_items_add_ads_page',
+    'menu_name' => 'menu-test',
+    'access arguments' => array('access to ads'),
+    'expanded' => TRUE,
+  ];
+  $items['catalogue'] = [
+    'title' => 'Каталог',
+    'description' => 'Каталог услуг',
+    'page callback' => 'list_of_items_catalogue_page',
+    'access callback' => TRUE,
+    'menu_name' => 'menu-test',
+    'expanded' => TRUE,
+  ];
+  $items['catalogue/dealership'] = [
+    'title' => 'Автосалоны',
+    'description' => 'Каталог автосалонов',
+    'page callback' => 'list_of_items_catalogue_dealership_page',
+    'access callback' => TRUE,
+    'menu_name' => 'menu-test',
+    'expanded' => TRUE,
+  ];
+  $items['catalogue/shop'] = [
+    'title' => 'Магазины',
+    'description' => 'Каталог магазинов',
+    'page callback' => 'list_of_items_catalogue_shop_page',
+    'access callback' => TRUE,
+    'menu_name' => 'menu-test',
+    'expanded' => TRUE,
+  ];
+  $items['review'] = [
+    'title' => 'Добавить отзыв',
+    'description' => 'Добавить отзыв о сервисе',
+    'page callback' => 'list_of_items_review_page',
+    'menu_name' => 'menu-test',
+    'access arguments' => array('access to reviews'),
+    'expanded' => TRUE,
+  ];
+  $items['test_item'] = [
+    'title' => 'Test Item',
+    'description' => 'This is test item',
+    'page callback' => 'list_of_items_test_item_page',
+    'menu_name' => 'menu-test',
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+  ];
+
+  $items['tab_item'] = array(
+    'title' => 'Страница с табами',
+    'page callback' => 'list_of_items_tab_item_page',
+    'access callback' => TRUE,
+    'menu_name' => 'menu-test',
+    'expanded' => TRUE,
+  );
+  $items['tab_item/first_tab'] = array(
+    'title' => 'Первый таб',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'access callback' => TRUE,
+    'weight' => -10,
+  );
+  $items['tab_item/second_tab'] = array(
+    'title' => 'Второй таб',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'list_of_items_tab_item_second_page',
+    'access callback' => TRUE,
+  );
+
+  $items['node/%node/short'] = array(
+    'title callback' => 'node_page_title_from_nid',
+    'title' => 'Short node',
+    'title arguments' => array(1),
+    'page callback' => 'list_of_items_node_item',
+    'page arguments' => array(1),
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => TRUE,
+  );
+  
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * Provides a demonstration access string.
+ */
+function list_of_items_permission() {
+  return array(
+    'access to ads' => array(
+      'title' => t('Access to adding ads'),
+      'description' => t('Perform administration tasks for my module.'),
+    ),
+    'access to reviews' => array(
+      'title' => t('Access to adding reviews'),
+      'description' => t('Perform administration tasks for my module.'),
+    ),
+  );
+}
+
+/**
+ * @param $items
+ */
+function list_of_items_menu_alter(&$items) {
+  if (!empty($items['test_item'])) {
+    $items['test_item_new'] = $items['test_item'];
+    $items['test_item_new']['title'] = 'Altered item';
+    unset($items['test_item']);
+  }
+  if (!empty($items['test_item_new'])) {
+    $items['test_item_new']['page callback'] = 'list_of_items_test_altered_page';
+  }
+  foreach ($items as $route => $item) {
+    $result = module_invoke_all('list_of_items_menu', $route, $item);
+    drupal_alter('list_of_items_menu', $result, $route, $item);
+    foreach ($result as $subroute => $subitem) {
+      $items[$route . '/' . $subroute] = $subitem;
+    }
+  }
+}
+
+/**
+ * Implements hook_list_of_items_menu().
+ *
+ * @param $route
+ * @param $item
+ * @return array
+ */
+function list_of_items_list_of_items_menu($route, $item) {
+  $subitems = array();
+  if ($route == 'catalogue') {
+    $subitems['shop1'] = [
+      'title' => 'Shop 1',
+      'description' => 'Каталог магазинов',
+      'page callback' => 'list_of_items_catalogue_shop_page',
+      'access callback' => TRUE,
+      'menu_name' => 'menu-test',
+      'expanded' => TRUE,
+    ];
+  }
+  return $subitems;
+}
+/**
+ * @return string
+ */
+
+/**
+ * Page callback for ads page.
+ *
+ * @return string
+ */
+function list_of_items_ads_page() {
+  return t("Страница с объявлениями");
+}
+
+/**
+ * Page callback for buy ads page.
+ *
+ * @return string
+ */
+function list_of_items_buy_ads_page() {
+  return t("Страница с объявлениями о покупке");
+}
+
+/**
+ * Page callback for sell ads page.
+ *
+ * @return string
+ */
+function list_of_items_sell_ads_page() {
+  return t("Страница с объявлениями о продаже");
+}
+
+/**
+ * Page callback for add ads page.
+ *
+ * @return string
+ */
+function list_of_items_add_ads_page() {
+  return t("Добавить объявление");
+}
+
+/**
+ * Page callback for catalogue page.
+ *
+ * @return string
+ */
+function list_of_items_catalogue_page() {
+  return t("Каталог услуг");
+}
+
+/**
+ * Page callback for catalogue dealership page.
+ *
+ * @return string
+ */
+function list_of_items_catalogue_dealership_page() {
+  return t("Каталог автосалонов");
+}
+
+/**
+ * Page callback for catalogue shop page.
+ *
+ * @return string
+ */
+function list_of_items_catalogue_shop_page() {
+  return t("Каталог автомагазинов");
+}
+
+/**
+ * @return mixed
+ */
+function list_of_items_review_page() {
+  return t("Добавить отзыв");
+}
+
+/**
+ * @return mixed
+ */
+function list_of_items_test_item_page() {
+  return t("This is test item");
+}
+
+/**
+ * @return mixed
+ */
+function list_of_items_test_altered_page() {
+  return t("This is altered test item");
+}
+
+/**
+ * @return mixed
+ */
+function list_of_items_tab_item_page() {
+  return t("Страница с табами");
+}
+
+/**
+ * @return mixed
+ */
+function list_of_items_tab_item_second_page() {
+  return t("Второй таб");
+}
+
+/**
+ * @param $node
+ * @return null|string
+ */
+function list_of_items_node_item($node) {
+  return t("Эта страница называется " . $node->title .
+    ", и доступна по адресу http://localhost/drupal/node/" . $node->nid);
+}
+
+/**
+ * @param $node
+ * @return mixed
+ */
+function node_page_title_from_nid($node) {
+  return $node->title;
+}
