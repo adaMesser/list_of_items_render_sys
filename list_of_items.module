@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  */
 
 /**
@@ -31,10 +31,13 @@ function list_of_items_help($path, $arg) {
  * @return mixed
  */
 function list_of_items_block_info() {
-  $blocks['list_of_items'] = [
+  $blocks['list_of_items'] = array(
     'info' => t('List of items'),
-    'cache' => DRUPAL_CACHE_PER_ROLE,
-  ];
+  );
+
+  $blocks['content_of_items'] = array(
+    'info' => t('Content of items'),
+  );
   return $blocks;
 }
 
@@ -47,7 +50,7 @@ function list_of_items_menu() {
     'title' => 'Объявления',
     'description' => 'Страница с объявлениями',
     'page callback' => 'list_of_items_ads_page',
-    'menu_name' => 'menu-test',
+    'menu_name' => 'menu-list-of-items',
     'expanded' => TRUE,
     'access callback' => TRUE,
   ];
@@ -56,7 +59,7 @@ function list_of_items_menu() {
     'description' => 'Страница с объявлениями о покупке',
     'page callback' => 'list_of_items_buy_ads_page',
     'access callback' => TRUE,
-    'menu_name' => 'menu-test',
+    'menu_name' => 'menu-list-of-items',
     'expanded' => TRUE,
   ];
   $items['ads/sell'] = [
@@ -64,15 +67,15 @@ function list_of_items_menu() {
     'description' => 'Страница с объявлениями о продаже',
     'page callback' => 'list_of_items_sell_ads_page',
     'access callback' => TRUE,
-    'menu_name' => 'menu-test',
+    'menu_name' => 'menu-list-of-items',
     'expanded' => TRUE,
   ];
   $items['ads/add'] = [
     'title' => 'Добавить объявление',
     'description' => 'Добавление объявления',
     'page callback' => 'list_of_items_add_ads_page',
-    'menu_name' => 'menu-test',
-    'access arguments' => array('access to ads'),
+    'menu_name' => 'menu-list-of-items',
+    'access arguments' => ['access to ads'],
     'expanded' => TRUE,
   ];
   $items['catalogue'] = [
@@ -80,7 +83,7 @@ function list_of_items_menu() {
     'description' => 'Каталог услуг',
     'page callback' => 'list_of_items_catalogue_page',
     'access callback' => TRUE,
-    'menu_name' => 'menu-test',
+    'menu_name' => 'menu-list-of-items',
     'expanded' => TRUE,
   ];
   $items['catalogue/dealership'] = [
@@ -88,7 +91,7 @@ function list_of_items_menu() {
     'description' => 'Каталог автосалонов',
     'page callback' => 'list_of_items_catalogue_dealership_page',
     'access callback' => TRUE,
-    'menu_name' => 'menu-test',
+    'menu_name' => 'menu-list-of-items',
     'expanded' => TRUE,
   ];
   $items['catalogue/shop'] = [
@@ -96,56 +99,56 @@ function list_of_items_menu() {
     'description' => 'Каталог магазинов',
     'page callback' => 'list_of_items_catalogue_shop_page',
     'access callback' => TRUE,
-    'menu_name' => 'menu-test',
+    'menu_name' => 'menu-list-of-items',
     'expanded' => TRUE,
   ];
   $items['review'] = [
     'title' => 'Добавить отзыв',
     'description' => 'Добавить отзыв о сервисе',
     'page callback' => 'list_of_items_review_page',
-    'menu_name' => 'menu-test',
-    'access arguments' => array('access to reviews'),
+    'menu_name' => 'menu-list-of-items',
+    'access arguments' => ['access to reviews'],
     'expanded' => TRUE,
   ];
   $items['test_item'] = [
     'title' => 'Test Item',
     'description' => 'This is test item',
     'page callback' => 'list_of_items_test_item_page',
-    'menu_name' => 'menu-test',
+    'menu_name' => 'menu-list-of-items',
     'access callback' => TRUE,
     'expanded' => TRUE,
   ];
 
-  $items['tab_item'] = array(
+  $items['tab_item'] = [
     'title' => 'Страница с табами',
     'page callback' => 'list_of_items_tab_item_page',
     'access callback' => TRUE,
-    'menu_name' => 'menu-test',
+    'menu_name' => 'menu-list-of-items',
     'expanded' => TRUE,
-  );
-  $items['tab_item/first_tab'] = array(
+  ];
+  $items['tab_item/first_tab'] = [
     'title' => 'Первый таб',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'access callback' => TRUE,
     'weight' => -10,
-  );
-  $items['tab_item/second_tab'] = array(
+  ];
+  $items['tab_item/second_tab'] = [
     'title' => 'Второй таб',
     'type' => MENU_LOCAL_TASK,
     'page callback' => 'list_of_items_tab_item_second_page',
     'access callback' => TRUE,
-  );
+  ];
 
-  $items['node/%node/short'] = array(
+  $items['node/%node/short'] = [
     'title callback' => 'node_page_title_from_nid',
     'title' => 'Short node',
-    'title arguments' => array(1),
+    'title arguments' => [1],
     'page callback' => 'list_of_items_node_item',
-    'page arguments' => array(1),
+    'page arguments' => [1],
     'type' => MENU_LOCAL_TASK,
     'access callback' => TRUE,
-  );
-  
+  ];
+
   return $items;
 }
 
@@ -155,16 +158,16 @@ function list_of_items_menu() {
  * Provides a demonstration access string.
  */
 function list_of_items_permission() {
-  return array(
-    'access to ads' => array(
+  return [
+    'access to ads' => [
       'title' => t('Access to adding ads'),
       'description' => t('Perform administration tasks for my module.'),
-    ),
-    'access to reviews' => array(
+    ],
+    'access to reviews' => [
       'title' => t('Access to adding reviews'),
       'description' => t('Perform administration tasks for my module.'),
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -196,7 +199,7 @@ function list_of_items_menu_alter(&$items) {
  * @return array
  */
 function list_of_items_list_of_items_menu($route, $item) {
-  $subitems = array();
+  $subitems = [];
   if ($route == 'catalogue') {
     $subitems['shop1'] = [
       'title' => 'Shop 1',
@@ -209,9 +212,16 @@ function list_of_items_list_of_items_menu($route, $item) {
   }
   return $subitems;
 }
+
 /**
  * @return string
  */
+
+/**
+ * Implements hook_theme().
+ */
+
+
 
 /**
  * Page callback for ads page.
@@ -219,7 +229,25 @@ function list_of_items_list_of_items_menu($route, $item) {
  * @return string
  */
 function list_of_items_ads_page() {
-  return t("Страница с объявлениями");
+  $block = array();
+
+  $block['subject'] = 'Content of items';
+
+  $message1 = t('Cтраница с обьявлениями');
+
+  $content = array(
+    '#theme' => 'list_of_items_first_block_message',
+
+    'message1' => array(
+      '#message' => $message1,
+      '#theme' => 'list_of_items_first_block_message',
+    ),
+
+  );
+
+  $block['content'] = $content;
+  
+  return $block;
 }
 
 /**
@@ -277,6 +305,7 @@ function list_of_items_catalogue_shop_page() {
 }
 
 /**
+ *
  * @return mixed
  */
 function list_of_items_review_page() {
@@ -326,4 +355,18 @@ function list_of_items_node_item($node) {
  */
 function node_page_title_from_nid($node) {
   return $node->title;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function list_of_items_theme($existing, $type, $theme, $path) {
+  $items = array();
+
+  $items['list_of_items_first_block_message'] = array(
+    'variables' => array('message' => NULL),
+    'template' => 'templates/block-list-of-items-first-message',
+  );
+
+  return $items;
 }
