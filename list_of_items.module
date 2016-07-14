@@ -236,7 +236,7 @@ function list_of_items_ads_page() {
   $message1 = t('Cтраница с обьявлениями');
 
   $content = array(
-    '#theme' => 'list_of_items_first_block_message',
+    '#theme' => 'list_of_items_first_block',
 
     'message1' => array(
       '#message' => $message1,
@@ -363,10 +363,14 @@ function node_page_title_from_nid($node) {
 function list_of_items_theme($existing, $type, $theme, $path) {
   $items = array();
 
+  $items['list_of_items_first_block'] = array(
+    'render element' => 'list_block',
+    'template' => 'templates/block-list-of-items-first',
+  );
+
   $items['list_of_items_first_block_message'] = array(
     'variables' => array('message' => NULL),
     'template' => 'templates/block-list-of-items-first-message',
   );
-
   return $items;
 }
