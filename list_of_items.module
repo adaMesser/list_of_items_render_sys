@@ -214,27 +214,13 @@ function list_of_items_list_of_items_menu($route, $item) {
 }
 
 /**
- * @return string
- */
-
-/**
- * Implements hook_theme().
- */
-
-
-
-/**
  * Page callback for ads page.
  *
- * @return string
+ * @return array
  */
 function list_of_items_ads_page() {
-  $block = array();
-
-  $block['subject'] = 'Content of items';
-
-  $message1 = t('Cтраница с обьявлениями');
-
+  $message1 = t('Страница с объявлениями');
+  $message2 = t('С использованием рендер-массива');
   $content = array(
     '#theme' => 'list_of_items_first_block',
 
@@ -242,12 +228,13 @@ function list_of_items_ads_page() {
       '#message' => $message1,
       '#theme' => 'list_of_items_first_block_message',
     ),
-
+    'message2' => array(
+      '#message' => $message2,
+      '#theme' => 'list_of_items_first_block_message',
+    ),
   );
 
-  $block['content'] = $content;
-  
-  return $block;
+  return $content;
 }
 
 /**
@@ -256,7 +243,22 @@ function list_of_items_ads_page() {
  * @return string
  */
 function list_of_items_buy_ads_page() {
-  return t("Страница с объявлениями о покупке");
+  $message1 = t('Страница с объявлениями о покупке');
+  $message2 = t('С использованием рендер-массива');
+  $content = array(
+    '#theme' => 'list_of_items_first_block',
+
+    'message1' => array(
+      '#message' => $message1,
+      '#theme' => 'list_of_items_first_block_message',
+    ),
+    'message2' => array(
+      '#message' => $message2,
+      '#theme' => 'list_of_items_first_block_message',
+    ),
+  );
+
+  return $content;
 }
 
 /**
@@ -359,12 +361,18 @@ function node_page_title_from_nid($node) {
 
 /**
  * Implements hook_theme().
+ *
+ * @param $existing
+ * @param $type
+ * @param $theme
+ * @param $path
+ * @return array
  */
 function list_of_items_theme($existing, $type, $theme, $path) {
   $items = array();
 
   $items['list_of_items_first_block'] = array(
-    'render element' => 'list_block',
+    'render element' => 'list',
     'template' => 'templates/block-list-of-items-first',
   );
 

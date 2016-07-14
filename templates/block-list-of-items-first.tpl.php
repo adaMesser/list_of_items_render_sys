@@ -1,5 +1,8 @@
 <?php
-  if (!empty($list_block['message1'])) {
-    print drupal_render($list_block['message1']);
+  if (!empty($list['message1'])) {
+    print drupal_render($list['message1']);
   }
-?>
+  if (!empty($list['message2'])) {
+    print drupal_render($list['message2']);
+  }
+
